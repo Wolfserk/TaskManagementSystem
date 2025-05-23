@@ -8,7 +8,7 @@ using TaskManagementSystem.Domain.Entities;
 
 namespace TaskManagementSystem.Infrastructure.Persistence
 {
-    internal class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+    public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {
         public DbSet<TaskItem> Tasks => Set<TaskItem>();
         public DbSet<User> Users => Set<User>();
