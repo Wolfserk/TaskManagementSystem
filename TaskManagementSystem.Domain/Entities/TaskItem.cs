@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TaskManagementSystem.Domain.Entities
 {
-    internal class TaskItem
+    public class TaskItem
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = null!;

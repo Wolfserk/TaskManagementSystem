@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TaskManagementSystem.Domain.Enums
 {
-    internal enum TaskStatus
+    public enum TaskStatus
     {
         New = 0,
         InProgress = 1,
