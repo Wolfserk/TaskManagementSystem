@@ -12,7 +12,7 @@ public static class DependencyInjection
         var connectionString = config.GetConnectionString("DefaultConnection");
 
         services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(connectionString)); // Убедитесь, что пакет Npgsql.EntityFrameworkCore.PostgreSQL установлен
+            options.UseNpgsql(connectionString));
 
         return services;
     }

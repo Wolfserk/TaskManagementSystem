@@ -17,7 +17,6 @@ namespace TaskManagementSystem.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            // Optional: Fluent API for relationships or constraints
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Tasks)
                 .WithOne(t => t.User)
