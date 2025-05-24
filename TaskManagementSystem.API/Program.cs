@@ -1,3 +1,4 @@
+using TaskManagementSystem.Application.Interfaces;
 using TaskManagementSystem.Application.Services;
 using TaskManagementSystem.Infrastructure;
 
@@ -10,6 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
