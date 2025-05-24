@@ -16,4 +16,6 @@ public class TaskItem
 
     public Guid? UserId { get; set; }
     public User? User { get; set; }
+
+    //public bool IsDeleted { get; set; } = false;
 }

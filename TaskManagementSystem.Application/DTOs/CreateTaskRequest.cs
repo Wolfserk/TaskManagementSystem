@@ -1,6 +1,6 @@
 ﻿namespace TaskManagementSystem.Application.DTOs;
 
-public class CreateTaskRequest
+public class CreateTaskRequest : ITaskRequest
 {
     public string Title { get; set; } = null!;
     public string? Description { get; set; }
