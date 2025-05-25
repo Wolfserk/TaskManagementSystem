@@ -6,6 +6,8 @@ using TaskManagementSystem.Application.Validators;
 using FluentValidation;
 using TaskManagementSystem.API.Middleware;
 using Serilog;
+using System.Reflection;
+using TaskManagementSystem.API.Extensions;
 
 
 
@@ -28,7 +30,15 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateTaskRequestValidator>
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateTaskRequestValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddCustomSwagger();
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+//    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+//    c.IncludeXmlComments(xmlPath);
+//});
 
 builder.Services.AddInfrastructure(builder.Configuration);
 

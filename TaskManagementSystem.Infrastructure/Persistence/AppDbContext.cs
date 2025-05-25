@@ -17,5 +17,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithOne(t => t.User)
             .HasForeignKey(t => t.UserId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<TaskItem>()
+        .HasQueryFilter(t => !t.IsDeleted);
     }
 }

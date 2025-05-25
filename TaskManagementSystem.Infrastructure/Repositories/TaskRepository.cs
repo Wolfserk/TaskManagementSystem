@@ -33,13 +33,17 @@ public class TaskRepository(AppDbContext context) : ITaskRepository
         var task = await _context.Tasks.FindAsync(id);
         if (task is null) return;
 
-        _context.Tasks.Remove(task);
+        task.IsDeleted = true;
+        task.UpdatedAt = DateTime.UtcNow;
+
         await _context.SaveChangesAsync();
     }
 
     public async Task<(IEnumerable<TaskItem> Tasks, int TotalCount)> GetFilteredAsync(TaskFilter filter)
     {
-        var query = _context.Tasks.Include(t => t.User).AsQueryable();
+        var query = _context.Tasks
+            .Include(t => t.User)
+            .AsQueryable();
 
         if (filter.Status != null)
             query = query.Where(t => t.Status == filter.Status);
