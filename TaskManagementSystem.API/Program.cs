@@ -1,13 +1,12 @@
 using FluentValidation.AspNetCore;
+using FluentValidation;
 using TaskManagementSystem.Application.Interfaces;
 using TaskManagementSystem.Application.Services;
 using TaskManagementSystem.Infrastructure;
 using TaskManagementSystem.Application.Validators;
-using FluentValidation;
 using TaskManagementSystem.API.Middleware;
-using Serilog;
-using System.Reflection;
 using TaskManagementSystem.API.Extensions;
+using Serilog;
 
 
 
@@ -33,19 +32,17 @@ builder.Services.AddEndpointsApiExplorer();
 
 
 builder.Services.AddCustomSwagger();
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-//    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-//    c.IncludeXmlComments(xmlPath);
-//});
+
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-var app = builder.Build();
+var app = builder.Build()
+        .MigrateAndSeedDatabase();
+
+
 
 if (app.Environment.IsDevelopment())
 {

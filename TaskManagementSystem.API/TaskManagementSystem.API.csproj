@@ -8,6 +8,8 @@
     <LaunchUrl>swagger</LaunchUrl>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	 <NoWarn>$(NoWarn);1591</NoWarn>
+	 <UserSecretsId>96d124b7-4de7-47e3-8f5e-124d2f3d36d5</UserSecretsId>
+	 <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +20,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
