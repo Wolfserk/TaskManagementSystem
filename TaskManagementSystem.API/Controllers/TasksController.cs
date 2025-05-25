@@ -96,7 +96,7 @@ public class TasksController(ITaskService taskService) : ControllerBase
     /// Изменить статус задачи.
     /// </summary>
     /// <param name="id">Идентификатор задачи.</param>
-    /// <param name="status">Новый статус задачи.</param>
+    /// <param name="status">Новый статус задачи (0 - Новая, 1 - В работе, 2 - Завершена).</param>
     [HttpPatch("{id}/status")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

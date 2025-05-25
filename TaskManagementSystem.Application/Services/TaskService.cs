@@ -104,9 +104,10 @@ public class TaskService(ITaskRepository taskRepo,
 
     public async Task ChangeStatusAsync(Guid id, UserTaskStatus status)
     {
-        var task = await _taskRepo.GetByIdAsync(id);
-        if (task is null) throw new KeyNotFoundException("Task not found");
+        if (!Enum.IsDefined(status))
+            throw new ValidationException($"Invalid task status: {status}");
 
+        var task = await _taskRepo.GetByIdAsync(id) ?? throw new KeyNotFoundException("Task not found");
         task.Status = status;
         await _taskRepo.UpdateAsync(task);
         _logger.LogInformation("Task status changed: {Id}, NewStatus: {Status}", id, status);
