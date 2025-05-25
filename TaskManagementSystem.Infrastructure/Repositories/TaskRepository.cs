@@ -46,17 +46,18 @@ public class TaskRepository(AppDbContext context) : ITaskRepository
             .Include(t => t.User)
             .ToListAsync();
     }
-
     public async Task<(IEnumerable<TaskItem> Tasks, int TotalCount)> GetFilteredAsync(TaskFilter filter)
     {
-        var query = _context.Tasks
-            .Include(t => t.User)
-            .AsQueryable();
+        var query = _context.Tasks.AsQueryable();
 
         if (filter.Status != null)
             query = query.Where(t => t.Status == filter.Status);
 
-        query = filter.SortBy.ToLower() switch
+        var total = await query.AsNoTracking().CountAsync();
+
+        query = query.Include(t => t.User);
+
+        query = filter.SortBy.ToLowerInvariant() switch
         {
             "title" => filter.SortDirection == "asc"
                 ? query.OrderBy(t => t.Title)
@@ -69,9 +70,10 @@ public class TaskRepository(AppDbContext context) : ITaskRepository
                 : query.OrderByDescending(t => t.CreatedAt),
         };
 
-        var total = await query.CountAsync();
+        var skip = (filter.Page - 1) * filter.PageSize;
         var paged = await query
-            .Skip((filter.Page - 1) * filter.PageSize)
+            .AsNoTracking()
+            .Skip(skip)
             .Take(filter.PageSize)
             .ToListAsync();
 
