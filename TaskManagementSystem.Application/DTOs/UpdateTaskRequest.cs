@@ -12,7 +12,7 @@ public class UpdateTaskRequest : ITaskRequest
     public string? Description { get; set; }
 
     /// <summary>Новая дата выполнения.</summary>
-    public DateTime? DueDate { get; set; }
+    public DateTime? Deadline { get; set; }
 
     /// <summary>ID пользователя, которому назначена задача.</summary>
     public Guid? UserId { get; set; }

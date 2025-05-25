@@ -19,8 +19,8 @@ public class TaskDto
     /// <summary>Дата создания.</summary>
     public DateTime CreatedAt { get; set; }
 
-    /// <summary>Срок выполнения..</summary>
-    public DateTime? DueDate { get; set; }
+    /// <summary>Конечный срок.</summary>
+    public DateTime? Deadline { get; set; }
 
     /// <summary>ID пользователя, которому назначена задача.</summary>
     public Guid? UserId { get; set; }
@@ -28,6 +28,6 @@ public class TaskDto
     /// <summary>Имя пользователя.</summary>
     public string? UserName { get; set; }
 
-    /// <summary>Email задачи.</summary>
+    /// <summary>Email пользователя.</summary>
     public string? UserEmail { get; set; }
 }

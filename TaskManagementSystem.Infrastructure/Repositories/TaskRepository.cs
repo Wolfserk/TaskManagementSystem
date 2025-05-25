@@ -39,6 +39,14 @@ public class TaskRepository(AppDbContext context) : ITaskRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<IEnumerable<TaskItem>> GetByUserIdAsync(Guid userId)
+    {
+        return await _context.Tasks
+            .Where(t => t.UserId == userId)
+            .Include(t => t.User)
+            .ToListAsync();
+    }
+
     public async Task<(IEnumerable<TaskItem> Tasks, int TotalCount)> GetFilteredAsync(TaskFilter filter)
     {
         var query = _context.Tasks
@@ -48,17 +56,14 @@ public class TaskRepository(AppDbContext context) : ITaskRepository
         if (filter.Status != null)
             query = query.Where(t => t.Status == filter.Status);
 
-        if (filter.UserId != null)
-            query = query.Where(t => t.UserId == filter.UserId);
-
         query = filter.SortBy.ToLower() switch
         {
             "title" => filter.SortDirection == "asc"
                 ? query.OrderBy(t => t.Title)
                 : query.OrderByDescending(t => t.Title),
-            "duedate" => filter.SortDirection == "asc"
-                ? query.OrderBy(t => t.DueDate)
-                : query.OrderByDescending(t => t.DueDate),
+            "deadline" => filter.SortDirection == "asc"
+                ? query.OrderBy(t => t.Deadline)
+                : query.OrderByDescending(t => t.Deadline),
             _ => filter.SortDirection == "asc"
                 ? query.OrderBy(t => t.CreatedAt)
                 : query.OrderByDescending(t => t.CreatedAt),

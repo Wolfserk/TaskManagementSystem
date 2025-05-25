@@ -6,7 +6,6 @@ using TaskManagementSystem.Domain.Enums;
 using TaskManagementSystem.Application.Interfaces;
 using Microsoft.Extensions.Logging;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
 
 namespace TaskManagementSystem.Application.Services;
 
@@ -17,24 +16,6 @@ public class TaskService(ITaskRepository taskRepo,
     private readonly ITaskRepository _taskRepo = taskRepo;
     private readonly ILogger<TaskService> _logger = logger;
     private readonly IUserRepository _userRepo = userRepo;
-
-    public async Task<IEnumerable<TaskDto>> GetAllAsync()
-    {
-        var tasks = await _taskRepo.GetAllAsync();
-
-        return tasks.Select(t => new TaskDto
-        {
-            Id = t.Id,
-            Title = t.Title,
-            Description = t.Description,
-            Status = t.Status,
-            CreatedAt = t.CreatedAt,
-            DueDate = t.DueDate,
-            UserId = t.UserId,
-            UserName = t.User?.Name,
-            UserEmail = t.User?.Email
-        });
-    }
 
     public async Task<TaskDto?> GetByIdAsync(Guid id)
     {
@@ -48,7 +29,7 @@ public class TaskService(ITaskRepository taskRepo,
             Description = task.Description,
             Status = task.Status,
             CreatedAt = task.CreatedAt,
-            DueDate = task.DueDate,
+            Deadline = task.Deadline,
             UserId = task.UserId,
             UserName = task.User?.Name,
             UserEmail = task.User?.Email
@@ -71,7 +52,7 @@ public class TaskService(ITaskRepository taskRepo,
             Id = Guid.NewGuid(),
             Title = request.Title,
             Description = request.Description,
-            DueDate = request.DueDate,
+            Deadline = request.Deadline,
             CreatedAt = DateTime.UtcNow,
             Status = UserTaskStatus.New,
             UserId = request.UserId
@@ -88,7 +69,7 @@ public class TaskService(ITaskRepository taskRepo,
         var task = await _taskRepo.GetByIdAsync(id) ?? throw new KeyNotFoundException("Task not found");
         task.Title = request.Title;
         task.Description = request.Description;
-        task.DueDate = request.DueDate;
+        task.Deadline = request.Deadline;
         task.UpdatedAt = DateTime.UtcNow;
         task.UserId = request.UserId;
 
@@ -118,7 +99,6 @@ public class TaskService(ITaskRepository taskRepo,
         var filter = new TaskFilter
         {
             Status = dto.Status,
-            UserId = dto.UserId,
             SortBy = dto.SortBy ?? "createdAt",
             SortDirection = dto.SortDirection ?? "desc",
             Page = dto.Page,
@@ -134,7 +114,7 @@ public class TaskService(ITaskRepository taskRepo,
             Description = t.Description,
             Status = t.Status,
             CreatedAt = t.CreatedAt,
-            DueDate = t.DueDate,
+            Deadline = t.Deadline,
             UserId = t.UserId,
             UserName = t.User?.Name,
             UserEmail = t.User?.Email

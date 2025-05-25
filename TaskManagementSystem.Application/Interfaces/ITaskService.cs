@@ -5,7 +5,6 @@ namespace TaskManagementSystem.Application.Interfaces;
 
 public interface ITaskService
 {
-    Task<IEnumerable<TaskDto>> GetAllAsync();
     Task<PagedResult<TaskDto>> GetFilteredAsync(TaskFilterDto filter);
     Task<TaskDto?> GetByIdAsync(Guid id);
     Task<Guid> CreateAsync(CreateTaskRequest request);

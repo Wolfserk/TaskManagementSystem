@@ -27,28 +27,12 @@ public class TasksController(ITaskService taskService) : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Получить задачу по идентификатору.
-    /// </summary>
-    /// <param name="id">Идентификатор задачи.</param>
-    /// <returns>Информация о задаче.</returns>
-    [ApiExplorerSettings(IgnoreApi = true)]
-    [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TaskDto>> Get(Guid id)
-    {
-        var task = await _taskService.GetByIdAsync(id);
-        if (task is null) return NotFound();
-        return Ok(task);
-    }
-
-
+    
     /// <summary>
     /// Создать новую задачу.
     /// </summary>
     /// <param name="request">Модель задачи для создания.</param>
-    /// <returns>Идентификатор созданной задачи.</returns>
+    /// <returns>ID созданной задачи.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -62,7 +46,7 @@ public class TasksController(ITaskService taskService) : ControllerBase
     /// <summary>
     /// Обновить существующую задачу.
     /// </summary>
-    /// <param name="id">Идентификатор задачи.</param>
+    /// <param name="id">ID задачи.</param>
     /// <param name="request">Модель с обновлёнными данными.</param>
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -83,7 +67,7 @@ public class TasksController(ITaskService taskService) : ControllerBase
     /// <summary>
     /// Удалить задачу (мягкое удаление).
     /// </summary>
-    /// <param name="id">Идентификатор задачи.</param>
+    /// <param name="id">ID задачи.</param>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(Guid id)
@@ -95,7 +79,7 @@ public class TasksController(ITaskService taskService) : ControllerBase
     /// <summary>
     /// Изменить статус задачи.
     /// </summary>
-    /// <param name="id">Идентификатор задачи.</param>
+    /// <param name="id">ID задачи.</param>
     /// <param name="status">Новый статус задачи (0 - Новая, 1 - В работе, 2 - Завершена).</param>
     [HttpPatch("{id}/status")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -111,5 +95,17 @@ public class TasksController(ITaskService taskService) : ControllerBase
         {
             return NotFound();
         }
+    }
+
+
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<TaskDto>> Get(Guid id)
+    {
+        var task = await _taskService.GetByIdAsync(id);
+        if (task is null) return NotFound();
+        return Ok(task);
     }
 }

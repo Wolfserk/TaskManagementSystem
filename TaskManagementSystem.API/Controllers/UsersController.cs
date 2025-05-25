@@ -16,7 +16,7 @@ public class UsersController(IUserService userService) : ControllerBase
     /// <summary>
     /// Получить список задач конкретного пользователя.
     /// </summary>
-    /// <param name="id">Идентификатор пользователя.</param>
+    /// <param name="id">ID пользователя.</param>
     /// <returns>Список задач пользователя.</returns>
     [HttpGet("{id}/tasks")]
     [ProducesResponseType(StatusCodes.Status200OK)]

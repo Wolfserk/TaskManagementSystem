@@ -1,7 +1,6 @@
 ﻿using TaskManagementSystem.Application.DTOs;
 using TaskManagementSystem.Application.Interfaces;
 using TaskManagementSystem.Domain.Interfaces;
-using TaskManagementSystem.Domain.Models;
 
 
 namespace TaskManagementSystem.Application.Services;
@@ -12,14 +11,7 @@ public class UserService(ITaskRepository taskRepo) : IUserService
 
     public async Task<IEnumerable<TaskDto>> GetUserTasksAsync(Guid userId)
     {
-        var filter = new TaskFilter
-        {
-            UserId = userId,
-            Page = 1,
-            PageSize = int.MaxValue
-        };
-
-        var (tasks, _) = await _taskRepo.GetFilteredAsync(filter);
+        var tasks = await _taskRepo.GetByUserIdAsync(userId);
 
         return tasks.Select(t => new TaskDto
         {
@@ -28,7 +20,7 @@ public class UserService(ITaskRepository taskRepo) : IUserService
             Description = t.Description,
             Status = t.Status,
             CreatedAt = t.CreatedAt,
-            DueDate = t.DueDate,
+            Deadline = t.Deadline,
             UserId = t.UserId,
             UserName = t.User?.Name,
             UserEmail = t.User?.Email

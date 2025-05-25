@@ -7,6 +7,7 @@ namespace TaskManagementSystem.Domain.Interfaces;
 public interface ITaskRepository
 {
     Task<(IEnumerable<TaskItem> Tasks, int TotalCount)> GetFilteredAsync(TaskFilter filter);
+    Task<IEnumerable<TaskItem>> GetByUserIdAsync(Guid userId);
     Task<TaskItem?> GetByIdAsync(Guid id);
     Task<IEnumerable<TaskItem>> GetAllAsync();
     Task AddAsync(TaskItem task);
