@@ -44,7 +44,7 @@ TaskManagementSystem/
 ├── API/             # Web API (контроллеры, middleware, Swagger)
 ├── Application/     # Сервисы, DTO, валидация
 ├── Domain/          # Сущности, enum'ы
-├── Infrastructure/  # EF Core, PostgreSQL, миграции, репозиторий
+├── Infrastructure/  # EF Core, PostgreSQL, миграции
 ├── Tests/           # xUnit + Moq
 └── docker-compose.yml
 ```
