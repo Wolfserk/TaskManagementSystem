@@ -8,27 +8,55 @@ public static class SeedData
 {
     public static void EnsureSeeded(AppDbContext context)
     {
-        if (!context.Users.Any())
+        var user1Id = Guid.Parse("f1811537-a05b-49bb-bee9-7a9480267c12");
+        var user2Id = Guid.Parse("f67b8dc6-0bee-4732-85fc-ff31a90615ad");
+
+        var user1 = context.Users.Find(user1Id);
+        var user2 = context.Users.Find(user2Id);
+
+        if (user1 == null)
         {
-            var user1 = new User { Id = Guid.Parse("f1811537-a05b-49bb-bee9-7a9480267c12"), Name = "TestUser1", Email = "user1@test.ru" };
-            var user2 = new User { Id = Guid.Parse("f67b8dc6-0bee-4732-85fc-ff31a90615ad"), Name = "TestUser2", Email = "user2@test.ru" };
-
-            var tasks = new List<TaskItem>
+            user1 = new User
             {
-                new() {
-                    Title = "Task1",
-                    Description = "Description of Task1",
-                    Status = UserTaskStatus.New,
-                    User = user1
-                },
-                new() {
-                    Title = "Task2",
-                    Status = UserTaskStatus.InProgress,
-                    User = user2
-                }
+                Id = user1Id,
+                Name = "TestUser1",
+                Email = "user1@test.ru"
             };
+            context.Users.Add(user1);
+        }
 
-            context.Users.AddRange(user1, user2);
+        if (user2 == null)
+        {
+            user2 = new User
+            {
+                Id = user2Id,
+                Name = "TestUser2",
+                Email = "user2@test.ru"
+            };
+            context.Users.Add(user2);
+        }
+
+        context.SaveChanges();
+
+        if (!context.Tasks.Any())
+        {
+            var tasks = new List<TaskItem>
+        {
+            new()
+            {
+                Title = "Task1",
+                Description = "Description of Task1",
+                Status = UserTaskStatus.New,
+                UserId = user1.Id
+            },
+            new()
+            {
+                Title = "Task2",
+                Status = UserTaskStatus.InProgress,
+                UserId = user2.Id
+            }
+        };
+
             context.Tasks.AddRange(tasks);
             context.SaveChanges();
         }
