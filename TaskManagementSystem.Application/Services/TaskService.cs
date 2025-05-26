@@ -6,6 +6,7 @@ using TaskManagementSystem.Domain.Enums;
 using TaskManagementSystem.Application.Interfaces;
 using Microsoft.Extensions.Logging;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskManagementSystem.Application.Services;
 
@@ -43,6 +44,7 @@ public class TaskService(ITaskRepository taskRepo,
             _ = await _userRepo.GetByIdAsync(userId.Value) ?? throw new ValidationException($"User with ID {userId} does not exist.");
         }
     }
+
     public async Task<Guid> CreateAsync(CreateTaskRequest request)
     {
 
@@ -73,8 +75,16 @@ public class TaskService(ITaskRepository taskRepo,
         task.UpdatedAt = DateTime.UtcNow;
         task.UserId = request.UserId;
 
-        await _taskRepo.UpdateAsync(task);
-        _logger.LogInformation("Task updated: {Id}", id);
+        try
+        {
+            await _taskRepo.UpdateAsync(task);
+            _logger.LogInformation("Task updated: {Id}", id);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            _logger.LogWarning("Concurrency conflict while updating task: {Id}", id);
+            throw new ValidationException("Task was modified by another user. Please reload and try again.");
+        }
     }
 
     public async Task DeleteAsync(Guid id)
@@ -90,8 +100,18 @@ public class TaskService(ITaskRepository taskRepo,
 
         var task = await _taskRepo.GetByIdAsync(id) ?? throw new KeyNotFoundException("Task not found");
         task.Status = status;
-        await _taskRepo.UpdateAsync(task);
-        _logger.LogInformation("Task status changed: {Id}, NewStatus: {Status}", id, status);
+        task.UpdatedAt = DateTime.UtcNow;
+
+        try
+        {
+            await _taskRepo.UpdateAsync(task);
+            _logger.LogInformation("Task status changed: {Id}, NewStatus: {Status}", id, status);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            _logger.LogWarning("Concurrency conflict while changing status of task: {Id}", id);
+            throw new ValidationException("Task was modified by another user. Please reload and try again.");
+        }
     }
 
     public async Task<PagedResult<TaskDto>> GetFilteredAsync(TaskFilterDto dto)

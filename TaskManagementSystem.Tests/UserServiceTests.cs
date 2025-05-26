@@ -1,12 +1,8 @@
 ﻿using Moq;
 using TaskManagementSystem.Application.Services;
-using TaskManagementSystem.Application.DTOs;
 using TaskManagementSystem.Domain.Entities;
 using TaskManagementSystem.Domain.Interfaces;
 using TaskManagementSystem.Domain.Enums;
-using TaskManagementSystem.Domain.Models;
-using Microsoft.Extensions.Logging;
-using FluentValidation;
 
 namespace TaskManagementSystem.Tests;
 

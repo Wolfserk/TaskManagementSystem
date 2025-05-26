@@ -7,6 +7,7 @@ using TaskManagementSystem.Domain.Enums;
 using TaskManagementSystem.Domain.Models;
 using Microsoft.Extensions.Logging;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskManagementSystem.Tests;
 
@@ -393,6 +394,35 @@ public class TaskServiceTests
             f.Page == 2 &&
             f.PageSize == 20
         )), Times.Once);
+    }
+
+    [Fact]
+    public async Task ChangeStatusAsync_ThrowsConcurrencyException_WhenDbUpdateConflictOccurs()
+    {
+        // Arrange
+        var taskId = Guid.NewGuid();
+        var task = new TaskItem
+        {
+            Id = taskId,
+            Title = "Concurrent Task",
+            Status = UserTaskStatus.New
+        };
+
+        _taskRepoMock.Setup(r => r.GetByIdAsync(taskId))
+                    .ReturnsAsync(task);
+
+        _taskRepoMock.Setup(r => r.UpdateAsync(task))
+                    .ThrowsAsync(new DbUpdateConcurrencyException());
+
+
+
+        var service = new TaskService(_taskRepoMock.Object, _loggerMock.Object, _userRepoMock.Object);
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<ValidationException>(() =>
+            service.ChangeStatusAsync(taskId, UserTaskStatus.Completed));
+
+        Assert.Contains("modified by another user", exception.Message);
     }
 
     private void VerifyLog(LogLevel level, string message)

@@ -24,4 +24,7 @@ public class TaskItem
     public User? User { get; set; }
 
     public bool IsDeleted { get; set; } = false;
+
+    [Timestamp]
+    public byte[] RowVersion { get; set; } = [];
 }

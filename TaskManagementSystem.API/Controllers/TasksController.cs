@@ -8,6 +8,12 @@ namespace TaskManagementSystem.API.Controllers;
 /// <summary>
 /// Управление задачами: создание, редактирование, фильтрация, удаление.
 /// </summary>
+/// <remarks>
+/// ## Возможные статусы задач:
+/// - 0: Новая
+/// - 1: В работе
+/// - 2: Завершена
+/// </remarks>
 [ApiController]
 [Route("api/[controller]")]
 public class TasksController(ITaskService taskService) : ControllerBase
@@ -17,8 +23,16 @@ public class TasksController(ITaskService taskService) : ControllerBase
     /// <summary>
     /// Получить список задач с фильтрацией, сортировкой и пагинацией.
     /// </summary>
-    /// <param name="filter">Параметры фильтрации, сортировки и пагинации.</param>
-    /// <returns>Список задач с информацией о пользователях.</returns>
+    /// <param name="filter">
+    /// Параметры фильтрации:
+    /// - Status: Фильтр по статусу (0, 1, 2)
+    /// - SortBy: Поле для сортировки (title, deadline, createdAt)
+    /// - SortDirection: Направление сортировки (asc, desc)
+    /// - Page: Номер страницы (начиная с 1)
+    /// - PageSize: Количество элементов на странице
+    /// </param>
+    /// <returns>Список задач с информацией о пользователях и метаданными пагинации.</returns>
+    /// <response code="200">Успешный запрос. Возвращает список задач.</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<PagedResult<TaskDto>>> GetAll([FromQuery] TaskFilterDto filter)
@@ -27,11 +41,11 @@ public class TasksController(ITaskService taskService) : ControllerBase
         return Ok(result);
     }
 
-    
+
     /// <summary>
     /// Создать новую задачу.
     /// </summary>
-    /// <param name="request">Модель задачи для создания.</param>
+    /// <param name="request">Модель задачи для создания (CreateTaskRequest).</param>
     /// <returns>ID созданной задачи.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -47,7 +61,7 @@ public class TasksController(ITaskService taskService) : ControllerBase
     /// Обновить существующую задачу.
     /// </summary>
     /// <param name="id">ID задачи.</param>
-    /// <param name="request">Модель с обновлёнными данными.</param>
+    /// <param name="request">Модель с обновлёнными данными (UpdateTaskRequest).</param>
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -96,7 +110,6 @@ public class TasksController(ITaskService taskService) : ControllerBase
             return NotFound();
         }
     }
-
 
     [ApiExplorerSettings(IgnoreApi = true)]
     [HttpGet("{id}")]
