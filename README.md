@@ -10,7 +10,8 @@ REST API для управления задачами.
 
 > Требуется установленный [Docker Desktop](https://www.docker.com/products/docker-desktop)
 
-Откройте терминал в папке, где находится файл `docker-compose.yml`, и выполните команду:
+- Скачайте или клонируйте репозиторий.
+- Откройте терминал в папке, где находится файл `docker-compose.yml`, и выполните команду:
 
 ```bash
 docker-compose up --build
